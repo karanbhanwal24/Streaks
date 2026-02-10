@@ -9,28 +9,28 @@ function WeeklyChart({ data }) {
     <ResponsiveContainer width="100%" height={300}>
       <BarChart data={data}>
         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-        <XAxis 
-          dataKey="weekLabel" 
+        <XAxis
+          dataKey="weekLabel"
           tick={{ fill: '#6b7280', fontSize: 12 }}
         />
-        <YAxis 
+        <YAxis
           tick={{ fill: '#6b7280', fontSize: 12 }}
           label={{ value: 'Completion %', angle: -90, position: 'insideLeft', fill: '#6b7280' }}
         />
-        <Tooltip 
-          contentStyle={{ 
-            backgroundColor: 'white', 
-            border: '1px solid #e5e7eb', 
-            borderRadius: '8px',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+        <Tooltip
+          contentStyle={{
+            backgroundColor: 'white',
+            border: '1px solid #e5e7eb',
+            borderRadius: '4px',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
           }}
           formatter={(value) => `${value}%`}
         />
-        <Bar dataKey="percentage" radius={[8, 8, 0, 0]}>
+        <Bar dataKey="percentage" radius={[4, 4, 0, 0]}>
           {data.map((entry, index) => (
-            <Cell 
-              key={`cell-${index}`} 
-              fill={entry.percentage >= 70 ? '#10b981' : entry.percentage >= 40 ? '#f59e0b' : '#ef4444'} 
+            <Cell
+              key={`cell-${index}`}
+              fill="#1a1a1a"
             />
           ))}
         </Bar>

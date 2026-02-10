@@ -10,7 +10,7 @@ function MonthlyChart({ habits }) {
     value: habit.percentage
   }))
 
-  const COLORS = ['#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#84cc16']
+  const COLORS = ['#1a1a1a', '#333333', '#4a4a4a', '#696969', '#808080', '#999999', '#b0b0b0', '#c0c0c0']
 
   return (
     <ResponsiveContainer width="100%" height={350}>

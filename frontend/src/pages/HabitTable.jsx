@@ -15,7 +15,7 @@ function HabitTable() {
   const year = today.getFullYear()
   const month = today.getMonth()
   const daysInMonth = new Date(year, month + 1, 0).getDate()
-  
+
   const dates = []
   for (let day = 1; day <= daysInMonth; day++) {
     const date = new Date(year, month, day)
@@ -54,40 +54,40 @@ function HabitTable() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-white">
         <Navbar />
         <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-primary-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-2 border-gray-900 border-t-transparent"></div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <Navbar />
-      
+
       <div className="max-w-full px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">Habit Tracker</h1>
-            <p className="text-gray-600">{monthName}</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-1">Streaks</h1>
+            <p className="text-gray-500 text-sm">{monthName}</p>
           </div>
           <button
             onClick={() => setShowAddForm(!showAddForm)}
-            className="btn-primary flex items-center gap-2"
+            className="btn-primary flex items-center gap-2 text-sm py-2"
           >
-            {showAddForm ? <X size={18} /> : <Plus size={18} />}
+            {showAddForm ? <X size={16} /> : <Plus size={16} />}
             {showAddForm ? 'Cancel' : 'Add Habit'}
           </button>
         </div>
 
         {/* Add Habit Form */}
         {showAddForm && (
-          <div className="card p-6 mb-6 shadow-lg">
+          <div className="card p-6 mb-6 border">
             <form onSubmit={handleAddHabit} className="flex flex-col sm:flex-row gap-4">
               <div className="flex-shrink-0">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-900 mb-2">
                   Icon
                 </label>
                 <input
@@ -99,7 +99,7 @@ function HabitTable() {
                 />
               </div>
               <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-900 mb-2">
                   Habit Name
                 </label>
                 <input
@@ -125,25 +125,24 @@ function HabitTable() {
         )}
 
         {/* Habits Table - Desktop View */}
-        <div className="hidden md:block card shadow-lg overflow-hidden">
+        <div className="hidden md:block card border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
-                <tr className="bg-gray-100 border-b border-gray-300">
-                  <th className="table-cell font-semibold text-gray-700 w-16 sticky left-0 bg-gray-100 z-10">
+                <tr className="bg-white border-b border-gray-300">
+                  <th className="table-cell font-semibold text-gray-700 w-16 sticky left-0 bg-white z-10">
                     Icon
                   </th>
-                  <th className="table-cell font-semibold text-gray-700 text-left min-w-[200px] sticky left-16 bg-gray-100 z-10">
+                  <th className="table-cell font-semibold text-gray-700 text-left min-w-[200px] sticky left-16 bg-white z-10">
                     Habit Name
                   </th>
                   {dates.map((date) => (
                     <th
                       key={date.dateString}
-                      className={`table-cell font-medium text-xs ${
-                        date.dateString === today.toISOString().split('T')[0]
-                          ? 'bg-primary-100 text-primary-700'
+                      className={`table-cell font-medium text-xs ${date.dateString === today.toISOString().split('T')[0]
+                          ? 'bg-gray-100 text-gray-900'
                           : 'text-gray-600'
-                      }`}
+                        }`}
                     >
                       <div className="flex flex-col items-center">
                         <div>{date.weekday}</div>
@@ -151,7 +150,7 @@ function HabitTable() {
                       </div>
                     </th>
                   ))}
-                  <th className="table-cell font-semibold text-gray-700 w-16 sticky right-0 bg-gray-100 z-10">
+                  <th className="table-cell font-semibold text-gray-700 w-16 sticky right-0 bg-white z-10">
                     Action
                   </th>
                 </tr>
@@ -221,7 +220,7 @@ function HabitTable() {
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-3">
                     <DayCheckbox
                       habit={habit}

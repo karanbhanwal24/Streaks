@@ -4,45 +4,45 @@
 
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900 font-sans;
+    @apply bg-white text-gray-900 font-sans;
   }
 }
 
 @layer components {
   .btn {
-    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply px-4 py-2 rounded font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
   }
-  
+
   .btn-primary {
-    @apply btn bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500;
+    @apply btn bg-black text-white hover:bg-gray-900 focus:ring-gray-500;
   }
-  
+
   .btn-secondary {
-    @apply btn bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-500;
+    @apply btn bg-gray-100 text-gray-900 hover:bg-gray-200 focus:ring-gray-500 border border-gray-200;
   }
-  
+
   .btn-danger {
-    @apply btn bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+    @apply btn bg-gray-700 text-white hover:bg-gray-800 focus:ring-gray-500;
   }
-  
+
   .input {
-    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all;
+    @apply w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-transparent transition-all;
   }
-  
+
   .card {
-    @apply bg-white rounded-lg shadow-sm border border-gray-200;
+    @apply bg-white border border-gray-200 rounded;
   }
-  
+
   .table-cell {
-    @apply border border-gray-300 px-3 py-2 text-sm;
+    @apply border border-gray-200 px-3 py-2 text-sm;
   }
-  
+
   .checkbox-cell {
     @apply table-cell text-center bg-white hover:bg-gray-50 cursor-pointer transition-colors;
   }
 
   .glass-panel {
-    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-lg;
+    @apply bg-white border border-gray-200 rounded;
   }
 
   .mobile-nav-item {
@@ -50,17 +50,24 @@
   }
 
   .mobile-nav-item-active {
-    @apply text-primary-600;
+    @apply text-gray-900;
   }
 
   .mobile-nav-item-inactive {
-    @apply text-gray-500 hover:text-gray-900;
+    @apply text-gray-400 hover:text-gray-900;
   }
 }
 
 @keyframes slideUp {
-  from { transform: translateY(100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .animate-slide-up {

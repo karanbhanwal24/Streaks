@@ -29,42 +29,39 @@ function Register() {
     setLoading(true)
 
     const result = await register(email, password)
-    
+
     if (result.success) {
       navigate('/dashboard')
     } else {
       setError(result.message)
     }
-    
+
     setLoading(false)
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 via-primary-100 to-primary-200 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-600 rounded-2xl mb-4 shadow-lg">
-            <span className="text-3xl">✓</span>
-          </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Get Started</h1>
-          <p className="text-gray-600">Create your account to start building habits</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
+          <p className="text-gray-500 text-sm">Start building better habits today</p>
         </div>
 
-        <div className="card p-8 shadow-xl">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="card p-8 border">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-                <AlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={20} />
-                <p className="text-sm text-red-800">{error}</p>
+              <div className="bg-gray-50 border border-gray-300 rounded p-4 flex items-start gap-3">
+                <AlertCircle className="text-gray-600 flex-shrink-0 mt-0.5" size={20} />
+                <p className="text-sm text-gray-700">{error}</p>
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-900 mb-2">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                 <input
                   type="email"
                   value={email}
@@ -77,11 +74,11 @@ function Register() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-900 mb-2">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                 <input
                   type="password"
                   value={password}
@@ -94,11 +91,11 @@ function Register() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-900 mb-2">
                 Confirm Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                 <input
                   type="password"
                   value={confirmPassword}
@@ -112,17 +109,17 @@ function Register() {
 
             <button
               type="submit"
-              className="btn-primary w-full flex items-center justify-center gap-2 py-3 text-lg"
+              className="btn-primary w-full flex items-center justify-center gap-2 py-2.5 text-sm"
               disabled={loading}
             >
               {loading ? (
                 <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
                   Creating account...
                 </>
               ) : (
                 <>
-                  <UserPlus size={20} />
+                  <UserPlus size={18} />
                   Create Account
                 </>
               )}
@@ -130,9 +127,9 @@ function Register() {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-gray-600">
+            <p className="text-gray-500 text-sm">
               Already have an account?{' '}
-              <Link to="/login" className="text-primary-600 font-medium hover:text-primary-700 transition-colors">
+              <Link to="/login" className="text-gray-900 font-medium hover:underline">
                 Sign in
               </Link>
             </p>
