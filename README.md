@@ -131,6 +131,36 @@ Charts, insights, and personalized recommendations
 
 ## 🌐 Deployment
 
+### Docker
+
+Run the full stack from the repository root:
+
+```bash
+docker compose up --build
+```
+
+This starts:
+- `frontend` at `http://localhost:5173`
+- `backend` at `http://localhost:5002`
+- `mongodb` at `mongodb://localhost:27017`
+
+Important:
+- Change `JWT_SECRET` in [docker-compose.yml](/Users/karansinghbhanwal/Streaks/docker-compose.yml) before using this outside local development.
+- The frontend container proxies `/api/*` requests to the backend container through Nginx.
+- MongoDB data is stored in the named Docker volume `mongo-data`.
+
+To stop the stack:
+
+```bash
+docker compose down
+```
+
+To stop it and remove the database volume:
+
+```bash
+docker compose down -v
+```
+
 ### Backend (Render)
 
 1. Create a new Web Service on [Render](https://render.com)

@@ -1,11 +1,21 @@
 import axios from 'axios';
 
+const normalizeLocalApiUrl = (url) => (
+  url.replace('://localhost', '://127.0.0.1').replace(/\/$/, '')
+);
+
+const apiBaseUrl = import.meta.env.DEV
+  ? ''
+  : normalizeLocalApiUrl(import.meta.env.VITE_API_URL || '');
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000',
+  baseURL: apiBaseUrl,
   headers: {
     'Content-Type': 'application/json',
   },
 });
+
+export const getApiUrl = (path) => `${apiBaseUrl}${path}`;
 
 // Request interceptor to add auth token
 api.interceptors.request.use(

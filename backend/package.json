@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch-path=server.js --watch-path=routes/auth.js --watch-path=routes/habits.js --watch-path=routes/analysis.js --watch-path=models/User.js --watch-path=models/Habit.js --watch-path=middleware/auth.middleware.js server.js"
   },
   "keywords": ["habit", "tracker", "express", "mongodb"],
   "author": "",

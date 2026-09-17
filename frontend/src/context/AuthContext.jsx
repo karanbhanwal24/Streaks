@@ -4,6 +4,23 @@ import api from '../utils/api'
 
 export const AuthContext = createContext(null)
 
+const getErrorMessage = (error, fallbackMessage) => {
+    if (error.response?.data?.message) {
+        return error.response.data.message
+    }
+
+    const validationErrors = error.response?.data?.errors
+    if (Array.isArray(validationErrors) && validationErrors.length > 0) {
+        return validationErrors[0].msg || fallbackMessage
+    }
+
+    if (error.code === 'ERR_NETWORK') {
+        return 'Cannot reach the server. Check that the backend is running and the API URL is configured correctly.'
+    }
+
+    return fallbackMessage
+}
+
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -32,7 +49,7 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             return {
                 success: false,
-                message: error.response?.data?.message || 'Login failed',
+                message: getErrorMessage(error, 'Login failed'),
             }
         }
     }
@@ -50,7 +67,7 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             return {
                 success: false,
-                message: error.response?.data?.message || 'Registration failed',
+                message: getErrorMessage(error, 'Registration failed'),
             }
         }
     }

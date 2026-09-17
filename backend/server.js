@@ -29,18 +29,26 @@ app.use('/api/analysis', analysisRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    success: true, 
-    message: 'Habit Tracker API is running',
+  const isDbConnected = mongoose.connection.readyState === 1;
+
+  res.status(isDbConnected ? 200 : 503).json({
+    success: isDbConnected,
+    message: isDbConnected
+      ? 'Habit Tracker API is running'
+      : 'Habit Tracker API is running, but the database is unavailable',
+    database: {
+      connected: isDbConnected,
+      readyState: mongoose.connection.readyState,
+    },
     timestamp: new Date().toISOString()
   });
 });
 
 // 404 handler
 app.use((req, res) => {
-  res.status(404).json({ 
-    success: false, 
-    message: 'Route not found' 
+  res.status(404).json({
+    success: false,
+    message: 'Route not found'
   });
 });
 
@@ -56,22 +64,53 @@ app.use((err, req, res, next) => {
 // Database connection
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
+    await mongoose.connect(process.env.MONGODB_URI, {
+      serverSelectionTimeoutMS: 5000
+    });
     console.log('✅ MongoDB connected successfully');
   } catch (error) {
     console.error('❌ MongoDB connection error:', error);
-    process.exit(1);
+    // Do not exit the process here; let the caller decide whether to continue.
+    throw error;
   }
 };
 
 // Start server
 const PORT = process.env.PORT || 5000;
+const HOST = process.env.HOST || '0.0.0.0';
 
-connectDB().then(() => {
-  app.listen(PORT, () => {
+const listenForRequests = () => new Promise((resolve, reject) => {
+  const server = app.listen(PORT, HOST);
+
+  server.once('listening', () => resolve(server));
+  server.once('error', reject);
+});
+
+const startServer = async () => {
+  try {
+    await connectDB();
+    await listenForRequests();
     console.log(`🚀 Server running on port ${PORT}`);
     console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-  });
-});
+  } catch (err) {
+    if (err.name !== 'MongooseServerSelectionError') {
+      console.error('❌ Server startup error:', err);
+      process.exit(1);
+    }
+
+    console.error('⚠️ Continuing to start server without DB connection. Some routes may fail.');
+
+    try {
+      await listenForRequests();
+      console.log(`⚠️ Server running on port ${PORT} (no DB)`);
+      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    } catch (listenError) {
+      console.error('❌ Server bind error:', listenError);
+      process.exit(1);
+    }
+  }
+};
+
+startServer();
 
 export default app;
