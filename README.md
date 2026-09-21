@@ -1,8 +1,8 @@
 # Habit Tracker - Full-Stack Web Application
 
-A beautiful, feature-rich habit tracking application built with React, Node.js, Express, and MongoDB. Track your daily habits with a Google Sheets-inspired interface, visualize your progress with charts, and get personalized insights to build better habits.
+A beautiful, feature-rich habit tracking application built with React, Node.js, Express, and PostgreSQL. Track your daily habits with a Google Sheets-inspired interface, visualize your progress with charts, and get personalized insights to build better habits.
 
-![Habit Tracker](https://img.shields.io/badge/Stack-MERN-success)
+![Habit Tracker](https://img.shields.io/badge/Stack-PERN-success)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
 ## ✨ Features
@@ -17,7 +17,7 @@ A beautiful, feature-rich habit tracking application built with React, Node.js, 
 - **Icon/Label Column**: Customize each habit with emojis or labels
 - **Daily Checkboxes**: Track completion for every day of the month
 - **Quick Actions**: Add, edit, and delete habits with ease
-- **Persistent Storage**: All data saved to MongoDB
+- **Persistent Storage**: All data saved to PostgreSQL
 
 ### 📈 Analytics & Insights
 - **Weekly Progress Charts**: Visualize 4-week trends with color-coded bars
@@ -48,7 +48,7 @@ A beautiful, feature-rich habit tracking application built with React, Node.js, 
 
 **Backend:**
 - Node.js & Express.js
-- MongoDB with Mongoose
+- PostgreSQL with node-postgres
 - JWT for authentication
 - bcrypt for password hashing
 - express-validator for input validation
@@ -57,7 +57,7 @@ A beautiful, feature-rich habit tracking application built with React, Node.js, 
 
 ### Prerequisites
 - Node.js (v16 or higher)
-- MongoDB (local or Atlas)
+- PostgreSQL (local, Docker, or a managed provider)
 - npm or yarn
 
 ### 1. Clone the Repository
@@ -73,14 +73,14 @@ npm install
 
 Create a `.env` file in the `backend` directory:
 ```env
-MONGODB_URI=mongodb://localhost:27017/habit_tracker
-# Or for MongoDB Atlas:
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/habit_tracker
+DATABASE_URL=postgresql://habit_tracker:habit_tracker@localhost:5432/habit_tracker
 
 JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
 PORT=5000
 NODE_ENV=development
 ```
+
+The backend creates its `users`, `habits`, and `habit_tracking` tables on first successful connection.
 
 Start the backend server:
 ```bash
@@ -142,12 +142,12 @@ docker compose up --build
 This starts:
 - `frontend` at `http://localhost:5173`
 - `backend` at `http://localhost:5002`
-- `mongodb` at `mongodb://localhost:27017`
+- `postgres` at `postgresql://habit_tracker:habit_tracker@localhost:5432/habit_tracker`
 
 Important:
 - Change `JWT_SECRET` in [docker-compose.yml](/Users/karansinghbhanwal/Streaks/docker-compose.yml) before using this outside local development.
 - The frontend container proxies `/api/*` requests to the backend container through Nginx.
-- MongoDB data is stored in the named Docker volume `mongo-data`.
+- PostgreSQL data is stored in the named Docker volume `postgres-data`.
 
 To stop the stack:
 
@@ -169,7 +169,7 @@ docker compose down -v
    - **Build Command**: `cd backend && npm install`
    - **Start Command**: `cd backend && npm start`
    - **Environment Variables**:
-     - `MONGODB_URI`: Your MongoDB Atlas connection string
+     - `DATABASE_URL`: Your PostgreSQL connection string
      - `JWT_SECRET`: Strong random string
      - `NODE_ENV`: `production`
 
@@ -194,7 +194,7 @@ See [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) for detailed endpoint documen
 ```
 Habits_Tracker/
 ├── backend/
-│   ├── models/          # Mongoose schemas
+│   ├── models/          # PostgreSQL data-access modules
 │   ├── routes/          # Express routes
 │   ├── middleware/      # Custom middleware
 │   ├── server.js        # Entry point

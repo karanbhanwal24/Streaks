@@ -9,21 +9,18 @@ This guide will help you deploy your Habit Tracker application:
 - GitHub repository set up ✅
 - Render account (https://render.com)
 - Vercel account (https://vercel.com)
-- MongoDB Atlas account (https://www.mongodb.com/cloud/atlas)
+- PostgreSQL database (Render PostgreSQL, Neon, Supabase, or similar)
 
 ---
 
-## Step 1: Set Up MongoDB Atlas (Database)
+## Step 1: Set Up PostgreSQL (Database)
 
-1. Go to https://www.mongodb.com/cloud/atlas and sign up
-2. Create a new cluster (Free tier is fine)
-3. Click "Connect" → "Connect your application"
-4. Copy the connection string (it will look like):
+1. Create a PostgreSQL database with your hosting provider.
+2. Copy its connection string (it will look like):
    ```
-   mongodb+srv://username:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
+   postgresql://username:<password>@host:5432/habit_tracker
    ```
-5. Replace `<password>` with your actual password
-6. Add `/habit-tracker` before the `?` to specify the database name
+3. Replace the placeholders with your database credentials.
 
 ---
 
@@ -47,8 +44,8 @@ This guide will help you deploy your Habit Tracker application:
 
 ### 2.3 Add Environment Variables
 In Render dashboard, go to "Environment" tab and add:
-- **Key**: `MONGODB_URI`  
-  **Value**: Your MongoDB connection string from Step 1
+- **Key**: `DATABASE_URL`
+  **Value**: Your PostgreSQL connection string from Step 1
   
 - **Key**: `JWT_SECRET`  
   **Value**: A random secure string (e.g., `your-super-secret-jwt-key-12345`)
@@ -128,8 +125,8 @@ After deploying frontend, update your backend to allow CORS from your Vercel URL
 - Check backend CORS settings
 
 ### Backend Database Errors
-- Verify MongoDB connection string is correct
-- Check MongoDB Atlas whitelist IP addresses (set to 0.0.0.0/0 for all IPs)
+- Verify the PostgreSQL connection string is correct
+- Ensure the database permits connections from the application host
 
 ### Build Failures
 - Check build logs in Vercel/Render dashboard
@@ -157,7 +154,7 @@ To run locally:
 # Backend
 cd backend
 npm install
-# Create .env file with MongoDB_URI and JWT_SECRET
+# Create .env file with DATABASE_URL and JWT_SECRET
 npm run dev
 
 # Frontend (in new terminal)
@@ -173,4 +170,4 @@ npm run dev
 If you encounter issues:
 1. Check deployment logs in Vercel/Render dashboard
 2. Verify all environment variables are set correctly
-3. Ensure MongoDB Atlas allows connections from all IPs
+3. Ensure the PostgreSQL database permits connections from the application host

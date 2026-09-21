@@ -1,6 +1,6 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
-import Habit from '../models/Habit.js';
+import { createHabit, deleteHabitForUser, findHabitByIdForUser, findHabitsByUser, toggleHabitTracking, updateHabitForUser } from '../models/Habit.js';
 import authMiddleware from '../middleware/auth.middleware.js';
 
 const router = express.Router();
@@ -13,7 +13,7 @@ router.use(authMiddleware);
 // @access  Private
 router.get('/', async (req, res) => {
   try {
-    const habits = await Habit.find({ userId: req.userId }).sort({ createdAt: -1 });
+    const habits = await findHabitsByUser(req.userId);
     res.json({
       success: true,
       habits
@@ -47,14 +47,7 @@ router.post('/', [
 
     const { name, icon } = req.body;
 
-    const habit = new Habit({
-      userId: req.userId,
-      name,
-      icon: icon || '📝',
-      tracking: []
-    });
-
-    await habit.save();
+    const habit = await createHabit({ userId: req.userId, name, icon: icon || '📝' });
 
     res.status(201).json({
       success: true,
@@ -94,11 +87,7 @@ router.put('/:id', [
     if (name) updateData.name = name;
     if (icon !== undefined) updateData.icon = icon;
 
-    const habit = await Habit.findOneAndUpdate(
-      { _id: req.params.id, userId: req.userId },
-      updateData,
-      { new: true, runValidators: true }
-    );
+    const habit = await updateHabitForUser(req.params.id, req.userId, updateData);
 
     if (!habit) {
       return res.status(404).json({ 
@@ -126,10 +115,7 @@ router.put('/:id', [
 // @access  Private
 router.delete('/:id', async (req, res) => {
   try {
-    const habit = await Habit.findOneAndDelete({ 
-      _id: req.params.id, 
-      userId: req.userId 
-    });
+    const habit = await deleteHabitForUser(req.params.id, req.userId);
 
     if (!habit) {
       return res.status(404).json({ 
@@ -169,10 +155,7 @@ router.post('/:id/track', [
 
     const { date } = req.body;
     
-    const habit = await Habit.findOne({ 
-      _id: req.params.id, 
-      userId: req.userId 
-    });
+    const habit = await toggleHabitTracking(req.params.id, req.userId, date);
 
     if (!habit) {
       return res.status(404).json({ 
@@ -180,19 +163,6 @@ router.post('/:id/track', [
         message: 'Habit not found' 
       });
     }
-
-    // Find existing tracking entry for this date
-    const existingEntry = habit.tracking.find(entry => entry.date === date);
-
-    if (existingEntry) {
-      // Toggle the completion status
-      existingEntry.completed = !existingEntry.completed;
-    } else {
-      // Add new tracking entry
-      habit.tracking.push({ date, completed: true });
-    }
-
-    await habit.save();
 
     res.json({
       success: true,
@@ -213,10 +183,7 @@ router.post('/:id/track', [
 // @access  Private
 router.get('/:id/weekly', async (req, res) => {
   try {
-    const habit = await Habit.findOne({ 
-      _id: req.params.id, 
-      userId: req.userId 
-    });
+    const habit = await findHabitByIdForUser(req.params.id, req.userId);
 
     if (!habit) {
       return res.status(404).json({ 
@@ -282,10 +249,7 @@ router.get('/:id/weekly', async (req, res) => {
 // @access  Private
 router.get('/:id/monthly', async (req, res) => {
   try {
-    const habit = await Habit.findOne({ 
-      _id: req.params.id, 
-      userId: req.userId 
-    });
+    const habit = await findHabitByIdForUser(req.params.id, req.userId);
 
     if (!habit) {
       return res.status(404).json({ 

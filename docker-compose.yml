@@ -1,14 +1,18 @@
 services:
-  mongodb:
-    image: mongo:7
-    container_name: streaks-mongodb
+  postgres:
+    image: postgres:16-alpine
+    container_name: streaks-postgres
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: habit_tracker
+      POSTGRES_USER: habit_tracker
+      POSTGRES_PASSWORD: habit_tracker
     volumes:
-      - mongo-data:/data/db
+      - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      test: ["CMD-SHELL", "pg_isready -U habit_tracker -d habit_tracker"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -20,10 +24,10 @@ services:
     container_name: streaks-backend
     restart: unless-stopped
     depends_on:
-      mongodb:
+      postgres:
         condition: service_healthy
     environment:
-      MONGODB_URI: mongodb://mongodb:27017/habit_tracker
+      DATABASE_URL: postgresql://habit_tracker:habit_tracker@postgres:5432/habit_tracker
       JWT_SECRET: change-this-jwt-secret
       PORT: 5000
       HOST: 0.0.0.0
@@ -42,4 +46,4 @@ services:
       - "5173:80"
 
 volumes:
-  mongo-data:
+  postgres-data:

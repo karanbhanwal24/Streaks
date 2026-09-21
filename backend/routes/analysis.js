@@ -1,5 +1,5 @@
 import express from 'express';
-import Habit from '../models/Habit.js';
+import { findHabitsByUser } from '../models/Habit.js';
 import authMiddleware from '../middleware/auth.middleware.js';
 
 const router = express.Router();
@@ -12,7 +12,7 @@ router.use(authMiddleware);
 // @access  Private
 router.get('/overview', async (req, res) => {
   try {
-    const habits = await Habit.find({ userId: req.userId });
+    const habits = await findHabitsByUser(req.userId);
 
     const today = new Date();
     const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -72,7 +72,7 @@ router.get('/overview', async (req, res) => {
 // @access  Private
 router.get('/auto', async (req, res) => {
   try {
-    const habits = await Habit.find({ userId: req.userId });
+    const habits = await findHabitsByUser(req.userId);
 
     if (habits.length === 0) {
       return res.json({
@@ -176,7 +176,7 @@ router.get('/auto', async (req, res) => {
 // @access  Private
 router.get('/report', async (req, res) => {
   try {
-    const habits = await Habit.find({ userId: req.userId });
+    const habits = await findHabitsByUser(req.userId);
     const today = new Date();
     const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
 

@@ -1,23 +1,15 @@
-import mongoose from 'mongoose';
+import { query } from '../db.js';
 
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: [true, 'Email is required'],
-    unique: true,
-    lowercase: true,
-    trim: true,
-    match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email address']
-  },
-  password: {
-    type: String,
-    required: [true, 'Password is required'],
-    minlength: [6, 'Password must be at least 6 characters']
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
-});
+const mapUser = row => row && ({ _id: String(row.id), email: row.email, password: row.password_hash, createdAt: row.created_at });
 
-export default mongoose.model('User', userSchema);
+export const findUserByEmail = async email => {
+  const { rows } = await query('SELECT id, email, password_hash, created_at FROM users WHERE email = $1', [email]);
+  return mapUser(rows[0]);
+};
+
+export const createUser = async ({ email, password }) => {
+  const { rows } = await query(
+    'INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id, email, password_hash, created_at', [email, password]
+  );
+  return mapUser(rows[0]);
+};
